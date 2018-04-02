@@ -358,7 +358,7 @@ ADC::update_system_power(void)
 	}
 
 #endif // CONFIG_ARCH_BOARD_PX4FMU_V2
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V4
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V4) || defined(CONFIG_ARCH_BOARD_UAVRS_V1)
 	system_power_s system_power = {};
 	system_power.timestamp = hrt_absolute_time();
 
@@ -375,8 +375,13 @@ ADC::update_system_power(void)
 	// publish these to the same topic
 	system_power.usb_connected = stm32_gpioread(GPIO_OTGFS_VBUS);
 
+#if defined (CONFIG_ARCH_BOARD_UAVRS_V1)
 	// note that the valid pins are active High
+	system_power.brick_valid   = 1;
+#else
 	system_power.brick_valid   = stm32_gpioread(GPIO_VDD_BRICK_VALID);
+#endif
+
 	system_power.servo_valid   = 1;
 
 	// OC pins are not supported
