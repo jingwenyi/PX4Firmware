@@ -70,21 +70,23 @@
 __EXPORT void stm32_spiinitialize(void)
 {
 #ifdef CONFIG_STM32_SPI1
-	stm32_configgpio(GPIO_SPI_CS_GYRO);
-	stm32_configgpio(GPIO_SPI_CS_ACCEL_MAG);
+	//stm32_configgpio(GPIO_SPI_CS_GYRO);
+	//stm32_configgpio(GPIO_SPI_CS_ACCEL_MAG);
 	stm32_configgpio(GPIO_SPI_CS_BARO);
 	stm32_configgpio(GPIO_SPI_CS_HMC);
-	stm32_configgpio(GPIO_SPI_CS_MPU);
+	//stm32_configgpio(GPIO_SPI_CS_MPU);
+	stm32_configgpio(GPIO_SPI_CS_ADIS);
 
 	/* De-activate all peripherals,
 	 * required for some peripheral
 	 * state machines
 	 */
-	stm32_gpiowrite(GPIO_SPI_CS_GYRO, 1);
-	stm32_gpiowrite(GPIO_SPI_CS_ACCEL_MAG, 1);
+	//stm32_gpiowrite(GPIO_SPI_CS_GYRO, 1);
+	//stm32_gpiowrite(GPIO_SPI_CS_ACCEL_MAG, 1);
 	stm32_gpiowrite(GPIO_SPI_CS_BARO, 1);
 	stm32_gpiowrite(GPIO_SPI_CS_HMC, 1);
-	stm32_gpiowrite(GPIO_SPI_CS_MPU, 1);
+	//stm32_gpiowrite(GPIO_SPI_CS_MPU, 1);
+	stm32_gpiowrite(GPIO_SPI_CS_ADIS, 1);
 
 //	stm32_configgpio(GPIO_EXTI_GYRO_DRDY);
 //	stm32_configgpio(GPIO_EXTI_MAG_DRDY);
@@ -103,6 +105,7 @@ __EXPORT void stm32_spi1select(FAR struct spi_dev_s *dev, enum spi_dev_e devid, 
 	/* SPI select is active low, so write !selected to select the device */
 
 	switch (devid) {
+#if 0
 	case PX4_SPIDEV_GYRO:
 		/* Making sure the other peripherals are not selected */
 		stm32_gpiowrite(GPIO_SPI_CS_GYRO, !selected);
@@ -147,6 +150,28 @@ __EXPORT void stm32_spi1select(FAR struct spi_dev_s *dev, enum spi_dev_e devid, 
 		stm32_gpiowrite(GPIO_SPI_CS_HMC, 1);
 		stm32_gpiowrite(GPIO_SPI_CS_MPU, !selected);
 		break;
+#else
+	case PX4_SPIDEV_BARO:
+		/* Making sure the other peripherals are not selected */
+		stm32_gpiowrite(GPIO_SPI_CS_BARO, !selected);
+		stm32_gpiowrite(GPIO_SPI_CS_HMC, 1);
+		stm32_gpiowrite(GPIO_SPI_CS_ADIS, 1);
+		break;
+
+	case PX4_SPIDEV_HMC:
+		/* Making sure the other peripherals are not selected */
+		stm32_gpiowrite(GPIO_SPI_CS_BARO, 1);
+		stm32_gpiowrite(GPIO_SPI_CS_HMC, !selected);
+		stm32_gpiowrite(GPIO_SPI_CS_ADIS, 1);
+		break;
+
+	case PX4_SPIDEV_ADIS:
+		/* Making sure the other peripherals are not selected */
+		stm32_gpiowrite(GPIO_SPI_CS_BARO, 1);
+		stm32_gpiowrite(GPIO_SPI_CS_HMC, 1);
+		stm32_gpiowrite(GPIO_SPI_CS_ADIS, !selected);
+		break;
+#endif
 
 	default:
 		break;

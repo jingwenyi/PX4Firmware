@@ -2753,17 +2753,19 @@ PX4FMU::sensor_reset(int ms)
 	}
 
     /* disable SPI bus */
-	stm32_configgpio(GPIO_SPI_CS_GYRO_OFF);
-	stm32_configgpio(GPIO_SPI_CS_ACCEL_MAG_OFF);
+	//stm32_configgpio(GPIO_SPI_CS_GYRO_OFF);
+	//stm32_configgpio(GPIO_SPI_CS_ACCEL_MAG_OFF);
 	stm32_configgpio(GPIO_SPI_CS_BARO_OFF);
-	stm32_configgpio(GPIO_SPI_CS_MPU_OFF);
+	//stm32_configgpio(GPIO_SPI_CS_MPU_OFF);
 	stm32_configgpio(GPIO_SPI_CS_HMC_OFF);
+	stm32_configgpio(GPIO_SPI_CS_ADIS_OFF);	
 
-	stm32_gpiowrite(GPIO_SPI_CS_GYRO_OFF, 0);
-	stm32_gpiowrite(GPIO_SPI_CS_ACCEL_MAG_OFF, 0);
+	//stm32_gpiowrite(GPIO_SPI_CS_GYRO_OFF, 0);
+	//stm32_gpiowrite(GPIO_SPI_CS_ACCEL_MAG_OFF, 0);
 	stm32_gpiowrite(GPIO_SPI_CS_BARO_OFF, 0);
-	stm32_gpiowrite(GPIO_SPI_CS_MPU_OFF, 0);
+	//stm32_gpiowrite(GPIO_SPI_CS_MPU_OFF, 0);
 	stm32_gpiowrite(GPIO_SPI_CS_HMC_OFF, 0);
+	stm32_gpiowrite(GPIO_SPI_CS_ADIS_OFF, 0);
 
 	stm32_configgpio(GPIO_SPI1_SCK_OFF);
 	stm32_configgpio(GPIO_SPI1_MISO_OFF);
@@ -2801,21 +2803,23 @@ PX4FMU::sensor_reset(int ms)
 
 	/* reconfigure the SPI pins */
 #ifdef CONFIG_STM32_SPI1
-	stm32_configgpio(GPIO_SPI_CS_GYRO);
-	stm32_configgpio(GPIO_SPI_CS_ACCEL_MAG);
+	//stm32_configgpio(GPIO_SPI_CS_GYRO);
+	//stm32_configgpio(GPIO_SPI_CS_ACCEL_MAG);
 	stm32_configgpio(GPIO_SPI_CS_BARO);
-	stm32_configgpio(GPIO_SPI_CS_MPU);
+	//stm32_configgpio(GPIO_SPI_CS_MPU);
 	stm32_configgpio(GPIO_SPI_CS_HMC);
+	stm32_configgpio(GPIO_SPI_CS_ADIS);	
 
 	/* De-activate all peripherals,
 	 * required for some peripheral
 	 * state machines
 	 */
-	stm32_gpiowrite(GPIO_SPI_CS_GYRO, 1);
-	stm32_gpiowrite(GPIO_SPI_CS_ACCEL_MAG, 1);
+	//stm32_gpiowrite(GPIO_SPI_CS_GYRO, 1);
+	//stm32_gpiowrite(GPIO_SPI_CS_ACCEL_MAG, 1);
 	stm32_gpiowrite(GPIO_SPI_CS_BARO, 1);
-	stm32_gpiowrite(GPIO_SPI_CS_MPU, 1);
+	//stm32_gpiowrite(GPIO_SPI_CS_MPU, 1);
 	stm32_gpiowrite(GPIO_SPI_CS_HMC, 1);
+	stm32_gpiowrite(GPIO_SPI_CS_ADIS, 1);
 
 	stm32_configgpio(GPIO_SPI1_SCK);
 	stm32_configgpio(GPIO_SPI1_MISO);
